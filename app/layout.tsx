@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Barlow_Condensed, DM_Sans, DM_Mono } from 'next/font/google'
 
 import Navbar from '@/components/Navbar'
+import TransitionProvider from '@/components/TransitionProvider'
 
 import './globals.css'
 
@@ -39,7 +40,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <Navbar />
-        {children}
+        <TransitionProvider>{children}</TransitionProvider>
       </body>
     </html>
   )
