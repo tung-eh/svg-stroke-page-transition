@@ -2,6 +2,7 @@
 import { useRef, useEffect } from 'react'
 import Image from 'next/image'
 import gsap from 'gsap'
+import { SplitText } from 'gsap/all'
 
 const items = [
   {
@@ -44,6 +45,14 @@ const CardItem = ({ imgSrc, strokeColor, title }: (typeof items)[number]) => {
     if (!container) return
 
     const paths = container.querySelectorAll('path')
+    const title = container.querySelector('h3')
+    const words = SplitText.create(title, {
+      type: 'words',
+      mask: 'words',
+    }).words
+
+    gsap.set(words, { yPercent: 100 })
+    gsap.set(title, { opacity: 1 })
 
     paths.forEach((path) => {
       const length = path.getTotalLength()
@@ -70,6 +79,16 @@ const CardItem = ({ imgSrc, strokeColor, title }: (typeof items)[number]) => {
         },
         0
       )
+      tl.to(
+        words,
+        {
+          yPercent: 0,
+          duration: 0.75,
+          ease: 'power3.out',
+          stagger: 0.075,
+        },
+        0.35
+      )
     }
 
     const handleMouseLeave = () => {
@@ -84,6 +103,19 @@ const CardItem = ({ imgSrc, strokeColor, title }: (typeof items)[number]) => {
           attr: { 'stroke-width': 25 },
           duration: 1,
           easer: 'power2.out',
+        },
+        0
+      )
+      tl.to(
+        words,
+        {
+          yPercent: 100,
+          duration: 0.5,
+          ease: 'power3.out',
+          stagger: {
+            each: 0.05,
+            from: 'end',
+          },
         },
         0
       )
@@ -131,7 +163,9 @@ const CardItem = ({ imgSrc, strokeColor, title }: (typeof items)[number]) => {
           className="opacity-0"
         />
       </svg>
-      <h3 className="absolute bottom-8 left-8 font-medium text-3xl">{title}</h3>
+      <h3 className="absolute bottom-8 left-8 font-medium text-3xl opacity-0">
+        {title}
+      </h3>
     </div>
   )
 }
